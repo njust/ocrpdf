@@ -1,0 +1,30 @@
+name: Rust
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build Backend
+        run: cargo build --verbose --release
+      - name: Create dist folder
+        run: mkdir dist
+      - name: Copy release bin
+        run: cp ./target/release/ocrpdf ./dist/
+      - uses: elgohr/Publish-Docker-Github-Action@master
+        name: Publish
+        id: publish
+        with:
+          name: ocrpdf
+          snapshot: true
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
