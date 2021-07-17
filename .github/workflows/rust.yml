@@ -24,7 +24,7 @@ jobs:
         name: Publish
         id: publish
         with:
-          name: ocrpdf
+          name: njust/ocrpdf
           snapshot: true
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
